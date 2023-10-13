@@ -15,6 +15,7 @@ public class GunScriptObj : ScriptableObject
     public Vector3 spawnPoint;
     public Vector3 spawnRotation;
 
+    public DamageConfig damageConfig;
     public ShootingConfigScriptObj shootConfig;
     public BulletTrailConfig trailConfig;
 
@@ -79,10 +80,15 @@ public class GunScriptObj : ScriptableObject
 
         instance.transform.position = Endpoint;
 
-        //if (Hit.collider != null)
-        //{
+        if (Hit.collider != null)
+        {
         //    SurfaceManager.Instance.HandleImpact (Hit.transform.gameObject, Endpoint, Hit.normal, impactType, 0);
-        //}
+
+            if (Hit.collider.TryGetComponent<IDamagable>(out IDamagable damageable))
+            {
+                damageable.TakeDamage(damageConfig.GetDamage(distance));
+            }
+        }
         
         yield return new WaitForSeconds(trailConfig.duration);
         yield return null;
