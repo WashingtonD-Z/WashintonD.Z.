@@ -84,7 +84,7 @@ public class GunScriptObj : ScriptableObject
         {
         //    SurfaceManager.Instance.HandleImpact (Hit.transform.gameObject, Endpoint, Hit.normal, impactType, 0);
 
-            if (Hit.collider.TryGetComponent<IDamagable>(out IDamagable damageable))
+            if (Hit.collider.TryGetComponent(out IDamageable damageable))
             {
                 damageable.TakeDamage(damageConfig.GetDamage(distance));
             }

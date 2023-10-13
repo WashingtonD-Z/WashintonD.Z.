@@ -11,6 +11,9 @@ public class EnemyAI : MonoBehaviour
 
     public LayerMask whatIsGround, whatIsPlayer;
 
+    public EnemyHealth enemyHealth;
+    public EnemyMovement movement;
+
     //Patrolling
     public Vector3 walkPoint;
     bool walkPointSet;
@@ -30,6 +33,10 @@ public class EnemyAI : MonoBehaviour
         agent.GetComponent<NavMeshAgent>();
     }
 
+    private void Start()
+    {
+        enemyHealth.OnDeath += Die;
+    }
     private void Update()
     {
         //Check  for sight and attack range
@@ -93,5 +100,13 @@ public class EnemyAI : MonoBehaviour
         private void ResetAttack()
         {
             alreadyAttacked = false;
+        }
+
+        private void Die(Vector3 position)
+        {
+            Debug.Log("Enemy has died");
+            movement.moveSpeed = 0;
+            movement.enabled = false;
+            this.enabled = false;
         }
 }

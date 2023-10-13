@@ -15,6 +15,6 @@ public class DamageConfig : ScriptableObject
 
     public int GetDamage(float Distance = 0)
     {
-        return Math.CeilToInt(damageCurve.Evaluate(Distance, Random.value));
+        return Mathf.CeilToInt(damageCurve.Evaluate(Distance, Random.value));
     }
 }
