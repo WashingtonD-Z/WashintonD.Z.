@@ -5,6 +5,7 @@ using UnityEngine;
 public class Item : MonoBehaviour
 {
     public Texture icon;
+    [SerializeField] private Transform physicalItem;
     void Start()
     {
         
@@ -14,5 +15,11 @@ public class Item : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void PickedUp()
+    {
+        physicalItem.GetComponent<Collider>().enabled = false;
+        physicalItem.GetComponent<MeshRenderer>().enabled = false;
     }
 }

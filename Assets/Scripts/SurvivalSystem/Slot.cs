@@ -46,7 +46,7 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         item = itemToAdd;
         itemScript = itemToAdd.GetComponent<Item>();
         itemIcon = itemScript.icon;
-        //itemScript.
+        itemScript.PickedUp();
         return true;
     }
 }
