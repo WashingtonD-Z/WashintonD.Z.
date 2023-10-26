@@ -58,7 +58,17 @@ public class PlayerStats : MonoBehaviour
             death();
         }
     }
-
+    public void Consume(ItemType type, float statChange)
+    {
+        if (type == ItemType.Food)
+        {
+            hunger += statChange;
+            if (hunger > maxHunger)
+            {
+                hunger = maxHunger;
+            }
+        }
+    }
     private void death()
     {
         //Insert game over screen and ask if respawn or if quit

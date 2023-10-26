@@ -14,6 +14,7 @@ public class Inventory : MonoBehaviour
     public Canvas inventoryScreen;
     public GameObject slotHolder;
     public Transform playerCamera;
+    public PlayerStats playerStats;
 
     
     private int slotCount;
@@ -28,7 +29,7 @@ public class Inventory : MonoBehaviour
         for (int i = 0; i < slotCount; i++)
         {
             slots[i] = slotHolder.transform.GetChild(i);
-            Debug.Log("Slot detected");
+            slots[i].GetComponent<Slot>().AddPlayer(playerStats);
         }
     }
 

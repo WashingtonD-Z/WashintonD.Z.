@@ -6,6 +6,9 @@ public class Item : MonoBehaviour
 {
     public Texture icon;
     [SerializeField] private Transform physicalItem;
+    public ItemType type;
+    public float statChange;
+
     void Start()
     {
         
@@ -21,5 +24,10 @@ public class Item : MonoBehaviour
     {
         physicalItem.GetComponent<Collider>().enabled = false;
         physicalItem.GetComponent<MeshRenderer>().enabled = false;
+    }
+
+    public void Consumed()
+    {
+        Destroy(physicalItem.gameObject);
     }
 }
