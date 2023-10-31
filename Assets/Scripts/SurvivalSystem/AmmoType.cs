@@ -2,11 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ItemType
+public enum AmmoType
 {
-    Food,
-    Water,
-    Hybrid,
-    Gun,
-    Mag
+    LightAmmo
 }

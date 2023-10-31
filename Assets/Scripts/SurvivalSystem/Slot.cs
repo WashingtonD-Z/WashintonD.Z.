@@ -8,7 +8,7 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
     private bool hovered;
 
-    private GameObject item;
+    public GameObject item;
     private Texture itemIcon;
     private Item itemScript;
     private PlayerStats playerStats;
@@ -37,20 +37,25 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (item = null)
+        if (item == null)
         {
             Debug.Log("No item to use");
             return;
         }
         if (itemScript.type == ItemType.Food || itemScript.type == ItemType.Water)
         {
-            playerStats.Consume(itemScript.type, itemScript.statChange);
+            playerStats.Consume(itemScript.type, itemScript.currentItemStat);
             item = null;
             itemIcon = null;
             this.GetComponent<RawImage>().texture = null;
             itemScript.Consumed();
             itemScript = null;
             Debug.Log("Item used");
+        }
+        if (itemScript.type == ItemType.Mag)
+        {
+            float ammoLeft = itemScript.AddAmmo(playerStats.lightAmmo);
+            playerStats.lightAmmo = ammoLeft;
         }
         
     }
@@ -74,8 +79,4 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         playerStats = pStats;
     }
 
-    private void ConsumeItem()
-    {
-
-    }
 }

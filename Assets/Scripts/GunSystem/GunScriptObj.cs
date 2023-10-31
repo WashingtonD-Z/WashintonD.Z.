@@ -18,6 +18,7 @@ public class GunScriptObj : ScriptableObject
     public DamageConfig damageConfig;
     public ShootingConfigScriptObj shootConfig;
     public BulletTrailConfig trailConfig;
+    public AmmoConfig ammoConfig;
 
     private MonoBehaviour activeMonoBehaviour;
     private GameObject model;
@@ -42,6 +43,10 @@ public class GunScriptObj : ScriptableObject
 
     public void Shoot()
     {
+        if (!ammoConfig.CheckIfCanShoot())
+        {
+            return;
+        }
         if (Time.time > shootConfig.fireRate + lastShot)
         {
             lastShot = Time.time;
@@ -111,5 +116,10 @@ public class GunScriptObj : ScriptableObject
         trail.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
 
         return trail;
+    }
+
+    public Item Reload(Item mag)
+    {
+        return ammoConfig.ReloadMag(mag); 
     }
 }

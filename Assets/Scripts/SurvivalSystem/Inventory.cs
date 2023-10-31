@@ -1,13 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Inventory : MonoBehaviour
 {
     [Header("Pickup system")]
     [SerializeField] private float maxPickupRange;
     [SerializeField] private LayerMask whatIsPickup;     
-    private GameObject pickup;
     [SerializeField] private KeyCode pickupKey = KeyCode.F;
 
     [Header("References")]
@@ -15,12 +15,13 @@ public class Inventory : MonoBehaviour
     public GameObject slotHolder;
     public Transform playerCamera;
     public PlayerStats playerStats;
+    public TMP_Text lightAmmoCounter;
 
     
     private int slotCount;
     private Transform[] slots;
     
-    private bool isOpened;
+    public bool isOpened;
     // Start is called before the first frame update
     void Start()
     {
@@ -36,7 +37,7 @@ public class Inventory : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        pickup = LookForItem();
+        GameObject pickup = LookForItem();
         if (pickup != null && Input.GetKeyDown(pickupKey))
         {
             PickupItem(pickup);
@@ -57,6 +58,8 @@ public class Inventory : MonoBehaviour
             inventoryScreen.enabled = false;
         }
 
+        lightAmmoCounter.text = "Light Ammo: " + playerStats.lightAmmo;
+         
     }
 
     private GameObject LookForItem()
@@ -76,6 +79,16 @@ public class Inventory : MonoBehaviour
 
     public void PickupItem(GameObject pickup)
     {
+
+        if (pickup.TryGetComponent(out Ammo ammo))
+        {
+            if (ammo.type == AmmoType.LightAmmo)
+            {
+                playerStats.lightAmmo += ammo.ammoCount;
+                ammo.PickedUp();
+                return;
+            }
+        }
         for (int i = 0; i < slotCount; i++)
         {
             if (slots[i].GetComponent<Slot>().TryAddItem(pickup))
@@ -83,5 +96,23 @@ public class Inventory : MonoBehaviour
                 break;
             }
         }
-    } 
+    }
+
+    public List<Item> getItemByType(ItemType type)
+    {
+        List<Item> itemList = new List<Item>();
+
+        for (int i = 0; i < slotCount; i++)
+        {
+            slots[i].GetComponent<Slot>().TryGetComponent(out Item item);
+            if (item)
+            {
+                if (item.type == type)
+                {
+                    itemList.Add(item);
+                }
+            }
+        }
+        return itemList;
+    }
 }
