@@ -7,6 +7,10 @@ public class EnemyBehaviour : MonoBehaviour
 {
     [SerializeField] Transform target;
     [SerializeField] float chaseRange = 5f;
+    [SerializeField] float turnSpeed = 5f;
+    [SerializeField] float wanderRadius = 10f; // Adjust the value as needed
+    [SerializeField] float patrolSpeed = 1f;
+    [SerializeField] float chaseSpeed = 3.5f;
 
     NavMeshAgent navMeshAgent;
     float distanceToTarget = Mathf.Infinity;
@@ -19,6 +23,7 @@ public class EnemyBehaviour : MonoBehaviour
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
+        navMeshAgent.speed = patrolSpeed;
     }
 
     // Update is called once per frame
@@ -34,20 +39,27 @@ public class EnemyBehaviour : MonoBehaviour
         else if(distanceToTarget <= chaseRange)
         {
             isProvoked = true;
-            animator.SetBool("isRunning", true);
+            //animator.SetBool("isRunning", true);
+            animator.SetTrigger("isMoving");
         }
 
-        else
+        else{
+            Patrol();
+        }
+
+        /*else
         {
             animator.SetBool("isRunning", false);
-        }
+        }*/
     }
 
     private void EngageTarget()
     {
+        FaceTarget();
         if(distanceToTarget >= navMeshAgent.stoppingDistance)
         {
             ChaseTarget();
+            navMeshAgent.speed = chaseSpeed;
         }
 
         if(distanceToTarget <= navMeshAgent.stoppingDistance)
@@ -59,10 +71,36 @@ public class EnemyBehaviour : MonoBehaviour
     private void ChaseTarget()
     {
         navMeshAgent.SetDestination(target.position);
+        animator.SetBool("isAttacking", false);
     }
 
     private void AttackTarget()
     {
-        Debug.Log("has seeked");
+        Debug.Log("attacking");
+        animator.SetBool("isAttacking", true);
+    }
+
+    private void FaceTarget()
+    {
+        Vector3 direction = (target.position - transform.position).normalized;
+        Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * turnSpeed);
+    }
+
+    private void Patrol()
+    {
+        if (navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
+        {
+            // Calculate a random position on the NavMesh within a radius.
+            Vector3 randomDirection = Random.insideUnitSphere * wanderRadius;
+            randomDirection += transform.position;
+            NavMeshHit hit;
+            NavMesh.SamplePosition(randomDirection, out hit, wanderRadius, 1);
+            Vector3 finalPosition = hit.position;
+
+            // Set the calculated position as the destination.
+            navMeshAgent.SetDestination(finalPosition);
+            navMeshAgent.speed = patrolSpeed;
+        }
     }
 }
