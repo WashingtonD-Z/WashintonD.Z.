@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
-
+using DG.Tweening;
 [CreateAssetMenu(fileName = "GunScriptObj", menuName = "Guns/Gun", order = 0)]
 
 public class GunScriptObj : ScriptableObject 
@@ -18,10 +18,12 @@ public class GunScriptObj : ScriptableObject
     public DamageConfig damageConfig;
     public ShootingConfigScriptObj shootConfig;
     public BulletTrailConfig trailConfig;
+    public AmmoConfig ammoConfig;
 
     private MonoBehaviour activeMonoBehaviour;
     private GameObject model;
     private float lastShot;
+    private bool isReloading;
     private ParticleSystem pSystem;
     private ObjectPool<TrailRenderer> trailPool;
 
@@ -39,11 +41,16 @@ public class GunScriptObj : ScriptableObject
 
         pSystem = model.GetComponentInChildren<ParticleSystem>();
     }
+    
 
     public void Shoot()
     {
-        if (Time.time > shootConfig.fireRate + lastShot)
+        if (Time.time > shootConfig.fireRate + lastShot && !isReloading)
         {
+            if (!ammoConfig.CheckIfCanShoot())
+            {
+                return;
+            }
             lastShot = Time.time;
             pSystem.Play();
             Vector3 shotDirection = playerCamera.transform.forward + new Vector3( Random.Range(-shootConfig.spread.x, shootConfig.spread.x), Random.Range(-shootConfig.spread.y, shootConfig.spread.y), Random.Range(-shootConfig.spread.z, shootConfig.spread.z));
@@ -111,5 +118,19 @@ public class GunScriptObj : ScriptableObject
         trail.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
 
         return trail;
+    }
+
+    public GameObject Reload(GameObject mag)
+    {
+        model.transform.DOLocalRotate(new Vector3(0,0,-45f), 0.25f);
+        isReloading = true;
+        
+        return ammoConfig.ReloadMag(mag); 
+    }
+
+    public void EndReload()
+    {
+        model.transform.DOLocalRotate(new Vector3(0,0,0), 0.25f);
+        isReloading = false;
     }
 }
