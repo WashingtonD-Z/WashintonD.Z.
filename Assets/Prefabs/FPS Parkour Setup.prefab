@@ -94,8 +94,7 @@ PrefabInstance:
       value: CameraHolder
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects:
-    - {fileID: 5792457844218567310, guid: 8f94eb3fdb7df584cb48578e5b7c35a9, type: 3}
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8f94eb3fdb7df584cb48578e5b7c35a9, type: 3}
@@ -120,6 +119,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4330954824240321810, guid: 8f94eb3fdb7df584cb48578e5b7c35a9, type: 3}
   m_PrefabInstance: {fileID: 5393689543903649514}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &8707242974722416197 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3606375369005187247, guid: 8f94eb3fdb7df584cb48578e5b7c35a9, type: 3}
+  m_PrefabInstance: {fileID: 5393689543903649514}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7231147872287710253
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -138,7 +142,7 @@ PrefabInstance:
       objectReference: {fileID: 8258541457159721347}
     - target: {fileID: 1915945856408740659, guid: 76f0cb3aab1ec374f83285daf864a52a, type: 3}
       propertyPath: whatIsGround.m_Bits
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3219374705828963925, guid: 76f0cb3aab1ec374f83285daf864a52a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -181,6 +185,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4628255719746108164, guid: 76f0cb3aab1ec374f83285daf864a52a, type: 3}
+      propertyPath: gunTip
+      value: 
+      objectReference: {fileID: 8707242974722416197}
+    - target: {fileID: 4628255719746108164, guid: 76f0cb3aab1ec374f83285daf864a52a, type: 3}
       propertyPath: jointSpring
       value: 2
       objectReference: {fileID: 0}
@@ -196,6 +204,10 @@ PrefabInstance:
       propertyPath: whatIsSwingable.m_Bits
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5209029317317055697, guid: 76f0cb3aab1ec374f83285daf864a52a, type: 3}
+      propertyPath: gunTip
+      value: 
+      objectReference: {fileID: 8707242974722416197}
     - target: {fileID: 5209029317317055697, guid: 76f0cb3aab1ec374f83285daf864a52a, type: 3}
       propertyPath: playerCamera
       value: 
@@ -264,54 +276,13 @@ PrefabInstance:
     - {fileID: 6832185003351527556, guid: 76f0cb3aab1ec374f83285daf864a52a, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8583227497371306293, guid: 76f0cb3aab1ec374f83285daf864a52a, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 3514498652541450288}
-    - targetCorrespondingSourceObject: {fileID: 8583227497371306293, guid: 76f0cb3aab1ec374f83285daf864a52a, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8933461676546090471}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 76f0cb3aab1ec374f83285daf864a52a, type: 3}
 --- !u!4 &729602585752679855 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7960713786333686146, guid: 76f0cb3aab1ec374f83285daf864a52a, type: 3}
   m_PrefabInstance: {fileID: 7231147872287710253}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1389234331673253144 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8583227497371306293, guid: 76f0cb3aab1ec374f83285daf864a52a, type: 3}
-  m_PrefabInstance: {fileID: 7231147872287710253}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &3514498652541450288
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1389234331673253144}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 41f6c0d985c4f1248947e937b8d38dc7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gunType: 0
-  gunParent: {fileID: 8557006862032456696}
-  guns:
-  - {fileID: 11400000, guid: 73182db510f44d94597b14c5cf950a62, type: 2}
-  activeGun: {fileID: 0}
---- !u!114 &8933461676546090471
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1389234331673253144}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dfc69c1abddedf14fa4db8a564717c8f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gunSelector: {fileID: 3514498652541450288}
 --- !u!4 &5257871826513033848 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3219374705828963925, guid: 76f0cb3aab1ec374f83285daf864a52a, type: 3}
