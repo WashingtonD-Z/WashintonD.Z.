@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: PistolAmmoConfig
   m_EditorClassIdentifier: 
   mag: {fileID: 0}
+  magObj: {fileID: 0}
+  reloadTime: 2

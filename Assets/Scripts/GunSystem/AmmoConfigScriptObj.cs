@@ -7,6 +7,7 @@ public class AmmoConfig : ScriptableObject
 {
     [SerializeField] private Item mag = null;
     [SerializeField] private GameObject magObj = null;
+    public float reloadTime;
     
 
     public bool CheckIfCanShoot()

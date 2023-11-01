@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
-
+using DG.Tweening;
 [CreateAssetMenu(fileName = "GunScriptObj", menuName = "Guns/Gun", order = 0)]
 
 public class GunScriptObj : ScriptableObject 
@@ -23,6 +23,7 @@ public class GunScriptObj : ScriptableObject
     private MonoBehaviour activeMonoBehaviour;
     private GameObject model;
     private float lastShot;
+    private bool isReloading;
     private ParticleSystem pSystem;
     private ObjectPool<TrailRenderer> trailPool;
 
@@ -40,10 +41,11 @@ public class GunScriptObj : ScriptableObject
 
         pSystem = model.GetComponentInChildren<ParticleSystem>();
     }
+    
 
     public void Shoot()
     {
-        if (Time.time > shootConfig.fireRate + lastShot)
+        if (Time.time > shootConfig.fireRate + lastShot && !isReloading)
         {
             if (!ammoConfig.CheckIfCanShoot())
             {
@@ -120,6 +122,15 @@ public class GunScriptObj : ScriptableObject
 
     public GameObject Reload(GameObject mag)
     {
+        model.transform.DOLocalRotate(new Vector3(0,0,-45f), 0.25f);
+        isReloading = true;
+        
         return ammoConfig.ReloadMag(mag); 
+    }
+
+    public void EndReload()
+    {
+        model.transform.DOLocalRotate(new Vector3(0,0,0), 0.25f);
+        isReloading = false;
     }
 }
