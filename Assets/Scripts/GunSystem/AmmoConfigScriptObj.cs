@@ -6,6 +6,7 @@ using UnityEngine;
 public class AmmoConfig : ScriptableObject 
 {
     [SerializeField] private Item mag = null;
+    [SerializeField] private GameObject magObj = null;
     
 
     public bool CheckIfCanShoot()
@@ -17,10 +18,24 @@ public class AmmoConfig : ScriptableObject
         return false;
     }
 
-    public Item ReloadMag(Item newMag)
+    public GameObject ReloadMag(GameObject newMag)
     {
-        Item oldMag = mag;
-        mag = newMag;
+        if (newMag == null)
+        {
+            GameObject Mag = magObj;
+            mag = null;
+            magObj = null;
+            return Mag;
+        }
+        if (mag == null)
+        {
+            magObj = newMag;
+            mag = magObj.GetComponent<Item>();
+            return null;
+        }
+        GameObject oldMag = magObj;
+        magObj = newMag;
+        mag = magObj.GetComponent<Item>();
         return oldMag;
     }
 }

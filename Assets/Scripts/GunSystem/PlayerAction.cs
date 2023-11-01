@@ -23,18 +23,29 @@ public class PlayerAction : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.R))
         {
-            List<Item> mags = inventory.getItemByType(ItemType.Mag);
-            Item bestMag = mags[0];
-                
-            foreach (Item mag in mags)
+            List<GameObject> mags = inventory.GetItemByType(ItemType.Mag);
+            if(mags.Count == 0)
             {
-                if (mag.currentItemStat > bestMag.currentItemStat)
+                GameObject Mag = gunSelector.activeGun.Reload(null);
+                inventory.AddItemToInventory(Mag);
+                return;
+            }
+            GameObject bestMag = mags[0];
+                
+            foreach (GameObject mag in mags)
+            {
+                if (mag.GetComponent<Item>().currentItemStat > bestMag.GetComponent<Item>().currentItemStat)
                 {
                     bestMag = mag;
                 }
             }
-            gunSelector.activeGun.Reload(bestMag);
-            //inventory.SwapMag(gunSelector.activeGun.Reload());
+            GameObject oldMag = gunSelector.activeGun.Reload(bestMag);
+            inventory.RemoveItemFromInventory(bestMag);
+            if (oldMag == null)
+            {
+                return;
+            }
+            inventory.AddItemToInventory(oldMag);
         }
     }
 }

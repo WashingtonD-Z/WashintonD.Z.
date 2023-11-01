@@ -29,6 +29,12 @@ public class Item : MonoBehaviour
         physicalItem.GetComponent<MeshRenderer>().enabled = false;
     }
 
+    public void Dropped()
+    {
+        physicalItem.GetComponent<Collider>().enabled = true;
+        physicalItem.GetComponent<MeshRenderer>().enabled = true;
+    }
+
     public void Consumed()
     {
         Destroy(physicalItem.gameObject);

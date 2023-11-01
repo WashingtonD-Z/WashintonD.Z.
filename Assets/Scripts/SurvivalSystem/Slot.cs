@@ -12,6 +12,7 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     private Texture itemIcon;
     private Item itemScript;
     private PlayerStats playerStats;
+    private Transform playerCamera;
 
     // Start is called before the first frame update
     void Start()
@@ -37,25 +38,32 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (item == null)
+        if (eventData.button == PointerEventData.InputButton.Left)
         {
-            Debug.Log("No item to use");
-            return;
+            if (item == null)
+            {
+                Debug.Log("No item to use");
+                return;
+            }
+            if (itemScript.type == ItemType.Food || itemScript.type == ItemType.Water)
+            {
+                playerStats.Consume(itemScript.type, itemScript.currentItemStat);
+                item = null;
+                itemIcon = null;
+                this.GetComponent<RawImage>().texture = null;
+                itemScript.Consumed();
+                itemScript = null;
+                Debug.Log("Item used");
+            }
+            if (itemScript.type == ItemType.Mag)
+            {
+                float ammoLeft = itemScript.AddAmmo(playerStats.lightAmmo);
+                playerStats.lightAmmo = ammoLeft;
+            }
         }
-        if (itemScript.type == ItemType.Food || itemScript.type == ItemType.Water)
+        else if (eventData.button == PointerEventData.InputButton.Right)
         {
-            playerStats.Consume(itemScript.type, itemScript.currentItemStat);
-            item = null;
-            itemIcon = null;
-            this.GetComponent<RawImage>().texture = null;
-            itemScript.Consumed();
-            itemScript = null;
-            Debug.Log("Item used");
-        }
-        if (itemScript.type == ItemType.Mag)
-        {
-            float ammoLeft = itemScript.AddAmmo(playerStats.lightAmmo);
-            playerStats.lightAmmo = ammoLeft;
+            DropItem();
         }
         
     }
@@ -74,9 +82,25 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         return true;
     }
 
-    public void AddPlayer(PlayerStats pStats)
+    public void AddPlayer(PlayerStats pStats, Transform camera)
     {
         playerStats = pStats;
+        playerCamera = camera;
     }
 
+    public void RemoveItem()
+    {
+        item = null;
+        itemIcon = null;
+        itemScript = null;
+        this.GetComponent<RawImage>().texture = itemIcon;
+    }
+
+    public void DropItem()
+    {
+        item.transform.position = new Vector3(playerCamera.position.x, playerCamera.position.y, playerCamera.position.z);
+        item.transform.position += playerCamera.forward * 2f;
+        itemScript.Dropped();
+        RemoveItem();
+    }
 }

@@ -43,12 +43,12 @@ public class GunScriptObj : ScriptableObject
 
     public void Shoot()
     {
-        if (!ammoConfig.CheckIfCanShoot())
-        {
-            return;
-        }
         if (Time.time > shootConfig.fireRate + lastShot)
         {
+            if (!ammoConfig.CheckIfCanShoot())
+            {
+                return;
+            }
             lastShot = Time.time;
             pSystem.Play();
             Vector3 shotDirection = playerCamera.transform.forward + new Vector3( Random.Range(-shootConfig.spread.x, shootConfig.spread.x), Random.Range(-shootConfig.spread.y, shootConfig.spread.y), Random.Range(-shootConfig.spread.z, shootConfig.spread.z));
@@ -118,7 +118,7 @@ public class GunScriptObj : ScriptableObject
         return trail;
     }
 
-    public Item Reload(Item mag)
+    public GameObject Reload(GameObject mag)
     {
         return ammoConfig.ReloadMag(mag); 
     }

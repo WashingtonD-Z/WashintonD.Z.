@@ -30,7 +30,7 @@ public class Inventory : MonoBehaviour
         for (int i = 0; i < slotCount; i++)
         {
             slots[i] = slotHolder.transform.GetChild(i);
-            slots[i].GetComponent<Slot>().AddPlayer(playerStats);
+            slots[i].GetComponent<Slot>().AddPlayer(playerStats, playerCamera);
         }
     }
 
@@ -40,7 +40,7 @@ public class Inventory : MonoBehaviour
         GameObject pickup = LookForItem();
         if (pickup != null && Input.GetKeyDown(pickupKey))
         {
-            PickupItem(pickup);
+            AddItemToInventory(pickup);
         }
 
         if (!isOpened && Input.GetKeyDown(KeyCode.I))
@@ -49,6 +49,7 @@ public class Inventory : MonoBehaviour
             Cursor.visible = true;
             isOpened = true;
             inventoryScreen.enabled = true;
+            playerCamera.GetComponent<PlayerCam>().enabled = false;
         }
         else if (isOpened && Input.GetKeyDown(KeyCode.I))
         {
@@ -56,6 +57,7 @@ public class Inventory : MonoBehaviour
             Cursor.visible = false;
             isOpened = false;
             inventoryScreen.enabled = false;
+            playerCamera.GetComponent<PlayerCam>().enabled = true;
         }
 
         lightAmmoCounter.text = "Light Ammo: " + playerStats.lightAmmo;
@@ -77,10 +79,10 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    public void PickupItem(GameObject pickup)
+    public void AddItemToInventory(GameObject itemToAdd)
     {
 
-        if (pickup.TryGetComponent(out Ammo ammo))
+        if (itemToAdd.TryGetComponent(out Ammo ammo))
         {
             if (ammo.type == AmmoType.LightAmmo)
             {
@@ -91,28 +93,45 @@ public class Inventory : MonoBehaviour
         }
         for (int i = 0; i < slotCount; i++)
         {
-            if (slots[i].GetComponent<Slot>().TryAddItem(pickup))
+            if (slots[i].GetComponent<Slot>().TryAddItem(itemToAdd))
             {
                 break;
             }
         }
     }
 
-    public List<Item> getItemByType(ItemType type)
+    public List<GameObject> GetItemByType(ItemType type)
     {
-        List<Item> itemList = new List<Item>();
+        List<GameObject> itemList = new List<GameObject>();
 
         for (int i = 0; i < slotCount; i++)
         {
-            slots[i].GetComponent<Slot>().TryGetComponent(out Item item);
+            GameObject item = slots[i].GetComponent<Slot>().item;
             if (item)
             {
-                if (item.type == type)
+                if (item.GetComponent<Item>().type == type)
                 {
                     itemList.Add(item);
                 }
             }
         }
         return itemList;
+    }
+
+    public void RemoveItemFromInventory(GameObject itemToRemove)
+    {
+        for (int i = 0; i < slotCount; i++)
+        {
+            GameObject item = slots[i].GetComponent<Slot>().item;
+            if (item)
+            {
+                Debug.Log("found shite");
+                if (item == itemToRemove)
+                {
+                    Debug.Log("Its him");
+                    slots[i].GetComponent<Slot>().RemoveItem();
+                }
+            }
+        }
     }
 }
