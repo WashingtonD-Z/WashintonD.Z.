@@ -8,5 +8,5 @@ public enum ItemType
     Water,
     Hybrid,
     Gun,
-    Ammo
+    Mag
 }

@@ -11,6 +11,7 @@ public class PlayerStats : MonoBehaviour
     private float health;
     private float hunger;
     //private float thirst;
+    public float lightAmmo;
 
     private bool starving = false;
 
