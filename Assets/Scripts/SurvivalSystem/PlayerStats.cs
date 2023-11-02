@@ -14,7 +14,7 @@ public class PlayerStats : MonoBehaviour, IDamageable
     public float maxHunger;
     //public float maxThirst;
     public float currentHealth { get => _health; set => _health = value; }
-    private float hunger;
+    public float hunger;
 
     //private float thirst;
     public float lightAmmo;

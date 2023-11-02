@@ -19,7 +19,7 @@ public class StatBars : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        healthHud.text = Mathf.Round(stats.health) + "/" + stats.maxHealth;
+        healthHud.text = Mathf.Round(stats.currentHealth) + "/" + stats.maxHealth;
         hungerHud.text = Mathf.Round(stats.hunger) + "/" + stats.maxHunger;
         if (playerGun.activeGun.ammoConfig.mag)
         {
