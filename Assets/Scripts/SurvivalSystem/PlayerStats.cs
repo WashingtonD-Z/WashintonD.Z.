@@ -15,18 +15,21 @@ public class PlayerStats : MonoBehaviour, IDamageable
     //public float maxThirst;
     public float currentHealth { get => _health; set => _health = value; }
     private float hunger;
+
     //private float thirst;
     public float lightAmmo;
 
     private bool starving = false;
 
     [Header("Drains")]
-    public float healthDrain;
-    public float hungerDrain;
+    [SerializeField] private float healthDrain;
+    [SerializeField] private float hungerDrain;
     //public float thirstDrain;
 
     [Header("Passive gain")]
-    public float healthGain;
+    [SerializeField] private float healthGain;
+
+    [SerializeField] private Canvas deathScreen;
 
     public event IDamageable.TakeDamageEvent OnTakeDamage;
     public event IDamageable.DeathEvent OnDeath;
@@ -87,6 +90,8 @@ public class PlayerStats : MonoBehaviour, IDamageable
     }
     private void death()
     {
-        //Insert game over screen and ask if respawn or if quit
+        deathScreen.enabled = true;
+        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = true;
     }
 }

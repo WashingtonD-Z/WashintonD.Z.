@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "AmmoConfigScriptObj", menuName = "Guns/Ammo Config", order = 0)]
 public class AmmoConfig : ScriptableObject 
 {
-    [SerializeField] private Item mag = null;
+    [SerializeField] public Item mag = null;
     [SerializeField] private GameObject magObj = null;
     public float reloadTime;
     
