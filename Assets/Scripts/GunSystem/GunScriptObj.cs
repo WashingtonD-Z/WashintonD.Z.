@@ -93,6 +93,7 @@ public class GunScriptObj : ScriptableObject
 
             if (Hit.collider.TryGetComponent(out IDamageable damageable))
             {
+                Debug.Log("You hit");
                 damageable.TakeDamage(damageConfig.GetDamage(distance));
             }
         }

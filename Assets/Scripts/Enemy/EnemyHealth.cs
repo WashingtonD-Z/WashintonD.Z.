@@ -5,25 +5,27 @@ using UnityEngine;
 public class EnemyHealth : MonoBehaviour, IDamageable
 {
     [SerializeField]
-    private int _maxHealth = 100;
+    private float _maxHealth = 100;
     [SerializeField]
-    private int _health;
+    private float _health;
 
-    public int maxHealth { get => _maxHealth; private set => _maxHealth = value; }
+    public float maxHealth { get => _maxHealth; private set => _maxHealth = value; }
 
-    public int currentHealth { get => _health; private set => _health = value; }
+    public float currentHealth { get => _health; private set => _health = value; }
 
     public event IDamageable.TakeDamageEvent OnTakeDamage;
     public event IDamageable.DeathEvent OnDeath;
+
+    [SerializeField] private EnemyBehaviour enemyBehaviour;
     // Start is called before the first frame update
     void Start()
     {
         currentHealth = maxHealth;
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
-        int damageTaken = Mathf.Clamp(damage, 0, currentHealth);
+        float damageTaken = Mathf.Clamp(damage, 0, currentHealth);
 
         currentHealth -= damageTaken;
         Debug.Log("Taken Damage");
@@ -34,6 +36,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
         if (currentHealth == 0 && damageTaken != 0)
         {
+            enemyBehaviour.enabled = false;
             OnDeath?.Invoke(transform.position);
         }
     }

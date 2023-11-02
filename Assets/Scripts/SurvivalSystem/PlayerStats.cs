@@ -2,13 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerStats : MonoBehaviour
+public class PlayerStats : MonoBehaviour, IDamageable
 {
     [Header("Stats")]
-    public float maxHealth;
+     [SerializeField]
+    private float _maxHealth = 100;
+    [SerializeField]
+    private float _health;
+
+    public float maxHealth { get => _maxHealth; private set => _maxHealth = value; }
     public float maxHunger;
     //public float maxThirst;
-    private float health;
+    public float currentHealth { get => _health; set => _health = value; }
     private float hunger;
     //private float thirst;
     public float lightAmmo;
@@ -23,10 +28,13 @@ public class PlayerStats : MonoBehaviour
     [Header("Passive gain")]
     public float healthGain;
 
+    public event IDamageable.TakeDamageEvent OnTakeDamage;
+    public event IDamageable.DeathEvent OnDeath;
+
     // Start is called before the first frame update
     void Start()
     {
-        health = maxHealth;
+        currentHealth = maxHealth;
         hunger = maxHunger;
         //thirst = maxThirst;
     }
@@ -42,19 +50,19 @@ public class PlayerStats : MonoBehaviour
         else
         {
             starving = true;
-            health -= healthDrain * Time.deltaTime;
+            currentHealth -= healthDrain * Time.deltaTime;
         }
 
-        if (!starving && health < maxHealth)
+        if (!starving && currentHealth < maxHealth)
         {
-            health += healthGain * Time.deltaTime;
-            if (health > maxHealth)
+            currentHealth += healthGain * Time.deltaTime;
+            if (currentHealth > maxHealth)
             {
-                health = maxHealth;
+                currentHealth = maxHealth;
             }
         }
 
-        if (health <= 0)
+        if (currentHealth <= 0)
         {
             death();
         }
@@ -69,6 +77,13 @@ public class PlayerStats : MonoBehaviour
                 hunger = maxHunger;
             }
         }
+    }
+
+    public void TakeDamage(float damage)
+    {
+        float damageTaken = Mathf.Clamp(damage, 0, currentHealth);
+
+        currentHealth -= damageTaken;
     }
     private void death()
     {

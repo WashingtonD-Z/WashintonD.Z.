@@ -4,14 +4,14 @@ using UnityEngine;
 
 public interface IDamageable
 {
-    public int currentHealth { get; }
-    public int maxHealth { get; }
+    public float currentHealth { get; }
+    public float maxHealth { get; }
 
-    public delegate void TakeDamageEvent(int damage);
+    public delegate void TakeDamageEvent(float damage);
     public event TakeDamageEvent OnTakeDamage;
 
     public delegate void DeathEvent(Vector3 position);
     public event DeathEvent OnDeath;
 
-    public void TakeDamage(int damage);
+    public void TakeDamage(float damage);
 }

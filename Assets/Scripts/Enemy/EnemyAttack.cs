@@ -19,7 +19,11 @@ public class EnemyAttack : MonoBehaviour
         {
             return;
         }
-        Debug.Log("bangbang");
+        if (target.TryGetComponent(out IDamageable damageable));
+        {
+            damageable.TakeDamage(damage);
+        }
+        return;
     }
 
     
