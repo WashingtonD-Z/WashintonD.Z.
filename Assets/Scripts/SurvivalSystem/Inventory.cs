@@ -16,6 +16,7 @@ public class Inventory : MonoBehaviour
     public Transform playerCamera;
     public PlayerStats playerStats;
     public TMP_Text lightAmmoCounter;
+    public Canvas DeathScreen;
 
     
     private int slotCount;
