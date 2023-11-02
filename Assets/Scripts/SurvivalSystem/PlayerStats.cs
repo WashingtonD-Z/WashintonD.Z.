@@ -8,20 +8,22 @@ public class PlayerStats : MonoBehaviour
     public float maxHealth;
     public float maxHunger;
     //public float maxThirst;
-    private float health;
-    private float hunger;
+    public float health;
+    public float hunger;
     //private float thirst;
     public float lightAmmo;
 
     private bool starving = false;
 
     [Header("Drains")]
-    public float healthDrain;
-    public float hungerDrain;
+    [SerializeField] private float healthDrain;
+    [SerializeField] private float hungerDrain;
     //public float thirstDrain;
 
     [Header("Passive gain")]
-    public float healthGain;
+    [SerializeField] private float healthGain;
+
+    [SerializeField] private Canvas deathScreen;
 
     // Start is called before the first frame update
     void Start()
@@ -72,6 +74,8 @@ public class PlayerStats : MonoBehaviour
     }
     private void death()
     {
-        //Insert game over screen and ask if respawn or if quit
+        deathScreen.enabled = true;
+        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = true;
     }
 }
