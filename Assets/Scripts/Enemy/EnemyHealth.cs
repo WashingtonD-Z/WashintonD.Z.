@@ -17,6 +17,9 @@ public class EnemyHealth : MonoBehaviour, IDamageable
     public event IDamageable.DeathEvent OnDeath;
 
     [SerializeField] private EnemyBehaviour enemyBehaviour;
+
+    private Animator animator;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -38,6 +41,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         {
             enemyBehaviour.enabled = false;
             OnDeath?.Invoke(transform.position);
+            animator.SetTrigger("isDying");
         }
     }
 }
