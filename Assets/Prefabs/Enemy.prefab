@@ -6580,6 +6580,7 @@ MonoBehaviour:
   _maxHealth: 100
   _health: 100
   enemyBehaviour: {fileID: 2713916030836904120}
+  animator: {fileID: 5913374786213978380}
 --- !u!114 &7038827837455253100
 MonoBehaviour:
   m_ObjectHideFlags: 0

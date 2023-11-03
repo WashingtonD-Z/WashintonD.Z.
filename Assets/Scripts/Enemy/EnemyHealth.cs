@@ -18,7 +18,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
     [SerializeField] private EnemyBehaviour enemyBehaviour;
 
-    private Animator animator;
+    public Animator animator;
 
     // Start is called before the first frame update
     void Start()

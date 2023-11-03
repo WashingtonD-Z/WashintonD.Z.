@@ -40,17 +40,12 @@ public class EnemyBehaviour : MonoBehaviour
         {
             isProvoked = true;
             //animator.SetBool("isRunning", true);
-            animator.SetTrigger("isMoving");
+            animator.SetTrigger("isChasing");
         }
 
         else{
             Patrol();
         }
-
-        /*else
-        {
-            animator.SetBool("isRunning", false);
-        }*/
     }
 
     private void EngageTarget()
@@ -72,12 +67,14 @@ public class EnemyBehaviour : MonoBehaviour
     {
         navMeshAgent.SetDestination(target.position);
         animator.SetBool("isAttacking", false);
+        //animator.SetTrigger("isAttackingg");
     }
 
     private void AttackTarget()
     {
         Debug.Log("attacking");
         animator.SetBool("isAttacking", true);
+        //animator.SetTrigger("isAttackingg");
     }
 
     private void FaceTarget()
