@@ -84,9 +84,7 @@ public class PlayerStats : MonoBehaviour, IDamageable
 
     public void TakeDamage(float damage)
     {
-        float damageTaken = Mathf.Clamp(damage, 0, currentHealth);
-
-        currentHealth -= damageTaken;
+        currentHealth -= damage;
     }
     private void death()
     {
