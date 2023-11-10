@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using TMPro;
 public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
-
-    private bool hovered;
 
     public GameObject item;
     private Texture itemIcon;
     private Item itemScript;
     private PlayerStats playerStats;
     private Transform playerCamera;
+    [SerializeField] private RawImage popUp;
+    [SerializeField] private TMP_Text popUpText;
+    public RawImage slot;
+    public bool hovered;
 
     // Start is called before the first frame update
     void Start()
@@ -28,12 +31,21 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        hovered = true;
+        RectTransform slotPos = slot.GetComponent<RectTransform>();
+        popUp.GetComponent<RectTransform>().anchoredPosition = new Vector3 (slotPos.anchoredPosition.x + 355, slotPos.anchoredPosition.y - 230, 0);
+        if (item)
+        {
+            SetPopUpText();
+            popUp.enabled = true;
+            popUpText.enabled = true;
+        }
+
     }
 
     public void  OnPointerExit(PointerEventData eventData)
     {
-        hovered = false;
+        popUp.enabled = false;
+        popUpText.enabled = false;
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -59,6 +71,7 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
             {
                 float ammoLeft = itemScript.AddAmmo(playerStats.lightAmmo);
                 playerStats.lightAmmo = ammoLeft;
+                SetPopUpText();
             }
         }
         else if (eventData.button == PointerEventData.InputButton.Right)
@@ -102,5 +115,17 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         item.transform.position += playerCamera.forward * 2f;
         itemScript.Dropped();
         RemoveItem();
+    }
+
+    private void SetPopUpText()
+    {
+        if (itemScript.type == ItemType.Mag)
+        {
+            popUpText.text = " " + item.name + "\n Max Capacity: " + itemScript.maxItemStat + "\n Current Amount: " + itemScript.currentItemStat;
+        }
+        else if (itemScript.type == ItemType.Food)
+        {
+            popUpText.text = " " + item.name + "\n Hunger: " + itemScript.currentItemStat;  
+        }
     }
 }

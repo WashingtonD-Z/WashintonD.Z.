@@ -16,7 +16,6 @@ public class Inventory : MonoBehaviour
     public Transform playerCamera;
     public PlayerStats playerStats;
     public TMP_Text lightAmmoCounter;
-    public Canvas DeathScreen;
 
     
     private int slotCount;
@@ -26,7 +25,7 @@ public class Inventory : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        slotCount = slotHolder.transform.childCount;
+        slotCount = slotHolder.transform.childCount - 1;
         slots = new Transform[slotCount];
         for (int i = 0; i < slotCount; i++)
         {
