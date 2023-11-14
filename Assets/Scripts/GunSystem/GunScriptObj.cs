@@ -20,6 +20,11 @@ public class GunScriptObj : ScriptableObject
     public BulletTrailConfig trailConfig;
     public AmmoConfig ammoConfig;
 
+    private float lastShootTime;
+    private float stopShootTime;
+    private float startShootTime;
+    private bool wantedToShoot;
+
     private MonoBehaviour activeMonoBehaviour;
     private GameObject model;
     private float lastShot;
@@ -42,18 +47,39 @@ public class GunScriptObj : ScriptableObject
         pSystem = model.GetComponentInChildren<ParticleSystem>();
     }
     
-
-    public void Shoot()
+    public void Tick(bool wantsToShoot)
     {
+        if(wantsToShoot)
+        {
+            wantedToShoot = true;
+            Shoot();
+        }
+        else if (!wantsToShoot && wantedToShoot)
+        {
+            stopShootTime = Time.time;
+            wantedToShoot = false;
+        }
+    }
+
+    public bool Shoot()
+    {
+        if (Time.time - lastShootTime - shootConfig.fireRate > Time.deltaTime)
+        {
+            float lastDuration = Mathf.Clamp (0, (stopShootTime - startShootTime), shootConfig.maxSpreadTime); 
+            float lerpTime = Mathf.Clamp01((shootConfig.recoveryTime - (Time.time - stopShootTime)) / shootConfig.recoveryTime);
+            startShootTime = Time.time - Mathf.Lerp(0, lastDuration, lerpTime);
+        }
+
         if (Time.time > shootConfig.fireRate + lastShot && !isReloading)
         {
             if (!ammoConfig.CheckIfCanShoot())
             {
-                return;
+                return false;
             }
             lastShot = Time.time;
+            StartRecoil();
             pSystem.Play();
-            Vector3 shotDirection = playerCamera.transform.forward + new Vector3( Random.Range(-shootConfig.spread.x, shootConfig.spread.x), Random.Range(-shootConfig.spread.y, shootConfig.spread.y), Random.Range(-shootConfig.spread.z, shootConfig.spread.z));
+            Vector3 shotDirection = playerCamera.transform.forward + shootConfig.GetSpread(Time.time - startShootTime);
             shotDirection.Normalize();
             if (Physics.Raycast(playerCamera.position, shotDirection, out RaycastHit hit, float.MaxValue, shootConfig.hitMask))
             {
@@ -63,7 +89,9 @@ public class GunScriptObj : ScriptableObject
             {
                 activeMonoBehaviour.StartCoroutine (PlayTrail(pSystem.transform.position, pSystem.transform.position + (shotDirection * trailConfig.missDistance), new RaycastHit()));
             }
+            return true;
         }
+        return false;
     }
 
     private IEnumerator PlayTrail(Vector3 Startpoint, Vector3 Endpoint, RaycastHit Hit)
@@ -133,5 +161,15 @@ public class GunScriptObj : ScriptableObject
     {
         model.transform.DOLocalRotate(new Vector3(0,0,0), 0.25f);
         isReloading = false;
+    }
+
+    private void StartRecoil()
+    {
+        model.transform.DOLocalRotate(new Vector3(-15f,0,0), 0.1f);
+    }
+
+    public void EndRecoil()
+    {
+        model.transform.DOLocalRotate(new Vector3(0,0,0), 0.1f);
     }
 }

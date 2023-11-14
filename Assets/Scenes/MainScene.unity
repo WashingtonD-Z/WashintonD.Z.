@@ -1223,6 +1223,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: FPS Player
       objectReference: {fileID: 0}
+    - target: {fileID: 8258541457159721347, guid: bae3845a4fd318644a81ca28771a59c6, type: 3}
+      propertyPath: sensX
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8258541457159721347, guid: bae3845a4fd318644a81ca28771a59c6, type: 3}
+      propertyPath: sensY
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8969627181500896455, guid: bae3845a4fd318644a81ca28771a59c6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 36

@@ -7,8 +7,11 @@ public class PlayerAction : MonoBehaviour
     [SerializeField] private PlayerGunSelector gunSelector;
 
     [SerializeField] private Inventory inventory;
-    private float counter = 0;
+    private float reloadCounter = 0;
+    private float recoilCounter = 0;
     private bool isReloading = false;
+    private bool isExperiencingRecoil = false;
+    private bool canFire = false;
 
     // Start is called before the first frame update
     void Start()
@@ -21,20 +24,33 @@ public class PlayerAction : MonoBehaviour
     {
         if (isReloading)
         {
-            counter += 1 *Time.deltaTime;
-            if (counter >= gunSelector.activeGun.ammoConfig.reloadTime)
+            reloadCounter += 1 * Time.deltaTime;
+            if (reloadCounter >= gunSelector.activeGun.ammoConfig.reloadTime)
             {
-                Debug.Log("hi");
                 gunSelector.activeGun.EndReload();
                 isReloading = false;
-                counter = 0;
+                reloadCounter = 0;
+            }
+        }
+        if (isExperiencingRecoil)
+        {
+            recoilCounter += 1 * Time.deltaTime;
+            if (recoilCounter >= gunSelector.activeGun.shootConfig.recoilTime)
+            {
+                gunSelector.activeGun.EndRecoil();
+                isExperiencingRecoil = false;
+                recoilCounter = 0;
             }
         }
         if (Input.GetMouseButton(0) && gunSelector.activeGun != null && inventory.isOpened == false)
         {
-            gunSelector.activeGun.Shoot();
+            canFire = gunSelector.activeGun.Shoot();
+            if (canFire == true && isExperiencingRecoil == false)
+            {
+                isExperiencingRecoil = true;
+            }
         }
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.R) && !isExperiencingRecoil && !isReloading)
         {
             isReloading = true;
             List<GameObject> mags = inventory.GetItemByType(ItemType.Mag);
