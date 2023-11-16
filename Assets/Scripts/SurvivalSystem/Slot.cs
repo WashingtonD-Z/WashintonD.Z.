@@ -121,11 +121,11 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     {
         if (itemScript.type == ItemType.Mag)
         {
-            popUpText.text = " " + item.name + "\n Max Capacity: " + itemScript.maxItemStat + "\n Current Amount: " + itemScript.currentItemStat;
+            popUpText.text = " " + item.name + "\n Max Capacity: " + itemScript.maxItemStat + "\n Current Amount: " + itemScript.currentItemStat + "\n\n\n Press LMB to fill with Ammo \n Press RMB to drop";
         }
         else if (itemScript.type == ItemType.Food)
         {
-            popUpText.text = " " + item.name + "\n Hunger: " + itemScript.currentItemStat;  
+            popUpText.text = " " + item.name + "\n Hunger: " + itemScript.currentItemStat + "\n\n\n\n Press LMB to eat \n Press RMB to drop";  
         }
     }
 }
