@@ -39,11 +39,14 @@ public class EnemyBehaviour : MonoBehaviour
         else if(distanceToTarget <= chaseRange)
         {
             isProvoked = true;
-            //animator.SetBool("isRunning", true);
             animator.SetTrigger("isChasing");
         }
 
-        else{
+        else
+        {
+            isProvoked = false;
+            animator.SetBool("isAttacking", false);
+            animator.ResetTrigger("isChasing");
             Patrol();
         }
     }
@@ -67,14 +70,12 @@ public class EnemyBehaviour : MonoBehaviour
     {
         navMeshAgent.SetDestination(target.position);
         animator.SetBool("isAttacking", false);
-        //animator.SetTrigger("isAttackingg");
     }
 
     private void AttackTarget()
     {
         Debug.Log("attacking");
         animator.SetBool("isAttacking", true);
-        //animator.SetTrigger("isAttackingg");
     }
 
     private void FaceTarget()
