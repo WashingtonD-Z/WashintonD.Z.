@@ -8,7 +8,8 @@ public class Inventory : MonoBehaviour
     [Header("Pickup system")]
     [SerializeField] private float maxPickupRange;
     [SerializeField] private LayerMask whatIsPickup;     
-    [SerializeField] private KeyCode pickupKey = KeyCode.F;
+    [SerializeField] private KeyCode pickupKey = (KeyCode)KeyBinds.PickUpKey;
+    [SerializeField] private KeyCode inventoryKey = (KeyCode)KeyBinds.InventoryKey;
 
     [Header("References")]
     public Canvas inventoryScreen;
@@ -16,7 +17,7 @@ public class Inventory : MonoBehaviour
     public Transform playerCamera;
     public PlayerStats playerStats;
     public TMP_Text lightAmmoCounter;
-    public Canvas DeathScreen;
+    public TMP_Text pressF;
 
     
     private int slotCount;
@@ -26,7 +27,8 @@ public class Inventory : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        slotCount = slotHolder.transform.childCount;
+        pressF.text = "Press " + pickupKey + " to pick up";
+        slotCount = slotHolder.transform.childCount - 1;
         slots = new Transform[slotCount];
         for (int i = 0; i < slotCount; i++)
         {
@@ -44,7 +46,7 @@ public class Inventory : MonoBehaviour
             AddItemToInventory(pickup);
         }
 
-        if (!isOpened && Input.GetKeyDown(KeyCode.I))
+        if (!isOpened && Input.GetKeyDown(inventoryKey))
         {
             Cursor.lockState = CursorLockMode.Confined;
             Cursor.visible = true;
@@ -52,7 +54,7 @@ public class Inventory : MonoBehaviour
             inventoryScreen.enabled = true;
             playerCamera.GetComponent<PlayerCam>().enabled = false;
         }
-        else if (isOpened && Input.GetKeyDown(KeyCode.I))
+        else if (isOpened && (Input.GetKeyDown(inventoryKey) || Input.GetKeyDown(KeyCode.Escape)))
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
@@ -72,10 +74,12 @@ public class Inventory : MonoBehaviour
 
         if (raycastHit.collider != null)
         {
+            pressF.enabled = true;
             return raycastHit.transform.gameObject;
         }
         else
         {
+            pressF.enabled = false;
             return null;
         }
     }
@@ -126,10 +130,8 @@ public class Inventory : MonoBehaviour
             GameObject item = slots[i].GetComponent<Slot>().item;
             if (item)
             {
-                Debug.Log("found shite");
                 if (item == itemToRemove)
                 {
-                    Debug.Log("Its him");
                     slots[i].GetComponent<Slot>().RemoveItem();
                 }
             }
